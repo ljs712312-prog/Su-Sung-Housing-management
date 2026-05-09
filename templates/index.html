@@ -8,57 +8,63 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
         body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; }
-        .badge-ready { background-color: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .badge-ready { background-color: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold; }
     </style>
 </head>
-<body class="p-4">
-    <header class="flex justify-between items-center mb-6 border-b pb-4">
+<body class="p-3">
+    <header class="flex justify-between items-center mb-5 border-b pb-3">
         <div>
             <h1 class="text-xl font-bold text-blue-900 leading-tight">SU SUNG<br>HOUSING</h1>
-            <p class="text-xs text-gray-400">수성 주택관리 | 실시간 매물장</p>
+            <p class="text-[10px] text-gray-400">실시간 매물장</p>
         </div>
         <div class="text-right">
             <p class="text-[10px] text-gray-400">임대문의</p>
-            <p class="text-lg font-bold text-blue-900">010-6485-0730</p>
+            <p class="text-base font-bold text-blue-900">010-6485-0730</p>
         </div>
     </header>
 
-    <div class="bg-blue-900 rounded-xl p-5 text-white mb-6 flex justify-between items-center shadow-md">
-        <div><p class="text-lg font-bold">전체 매물</p><p class="opacity-70 text-[10px]">{{ today }} 업데이트</p></div>
+    <div class="bg-blue-900 rounded-xl p-4 text-white mb-6 flex justify-between items-center shadow-md">
+        <div><p class="text-base font-bold">매물 현황</p><p class="opacity-70 text-[9px]">{{ today }} 업데이트</p></div>
         <div class="flex gap-4">
-            <div class="text-center"><p class="text-[10px] opacity-60">일반</p><p class="font-bold">{{ total_normal }}</p></div>
-            <div class="text-center"><p class="text-[10px] opacity-60 text-orange-300">단기</p><p class="font-bold text-orange-300">{{ total_short }}</p></div>
+            <div class="text-center"><p class="text-[9px] opacity-60">일반</p><p class="text-sm font-bold">{{ total_normal }}</p></div>
+            <div class="text-center"><p class="text-[9px] opacity-60 text-orange-300">단기</p><p class="text-sm font-bold text-orange-300">{{ total_short }}</p></div>
         </div>
     </div>
 
-    <h2 class="text-xl font-bold mb-4 text-gray-800 border-l-4 border-blue-600 pl-2">🏢 일반 매물</h2>
+    <h2 class="text-lg font-bold mb-3 text-gray-800 border-l-4 border-blue-600 pl-2">🏢 일반 매물</h2>
     {% for area_name, buildings in normal_data.items() %}
-    <div class="mb-8">
-        <h3 class="text-sm font-bold mb-2 text-blue-800">📍 {{ area_name }}</h3>
+    <div class="mb-6">
+        <h3 class="text-xs font-bold mb-2 text-blue-800">📍 {{ area_name }}</h3>
         {% for b_name, b_data in buildings.items() %}
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4 overflow-hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4 overflow-hidden text-xs">
             <div class="bg-gray-50 p-3 border-b flex justify-between items-start">
                 <div class="flex-1">
-                    {% if b_name and b_name != "이름없음" %}<p class="font-bold text-base leading-tight">{{ b_name }}</p>{% endif %}
-                    <p class="text-xs text-gray-500 mt-1">{{ b_data.address }}</p>
+                    <p class="font-bold text-sm leading-tight">{{ b_name }}</p>
+                    <p class="text-[10px] text-gray-500 mt-1">{{ b_data.address }}</p>
                 </div>
                 <div class="text-right flex flex-col gap-1">
-                    <p class="text-[11px] text-blue-600 font-bold">📞 임차인: {{ b_data.landlord }}</p>
-                    <span class="bg-white border border-gray-300 px-2 py-0.5 rounded text-[10px] text-gray-700 font-medium">🔑 공동현관: {{ b_data.entrance_pw }}</span>
+                    <p class="text-[10px] text-blue-600 font-bold">📞 임차인: {{ b_data.landlord }}</p>
+                    <span class="bg-white border border-gray-300 px-2 py-0.5 rounded text-[9px] text-gray-700 font-medium">🔑 공동현관: {{ b_data.entrance_pw }}</span>
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-[11px] text-left whitespace-nowrap">
-                    <thead class="bg-gray-50 text-gray-400 border-b">
-                        <tr><th class="px-3 py-2">호실</th><th class="px-3 py-2">보증금/월세</th><th class="px-3 py-2 text-blue-700">세대비번</th><th class="px-3 py-2">상태</th></tr>
+                <table class="w-full text-left whitespace-nowrap">
+                    <thead class="bg-gray-50 text-gray-400 border-b text-[10px]">
+                        <tr>
+                            <th class="px-3 py-2">호실</th><th class="px-3 py-2">타입</th>
+                            <th class="px-3 py-2">보증금/월세</th><th class="px-3 py-2 text-blue-700">관리비</th>
+                            <th class="px-3 py-2">세대비번</th><th class="px-3 py-2">상태</th><th class="px-3 py-2">비고</th>
+                        </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-gray-100 text-[10px]">
                         {% for room in b_data.rooms %}
                         <tr>
-                            <td class="px-3 py-3 font-bold">{{ room.no }}</td>
+                            <td class="px-3 py-3 font-bold">{{ room.no }}</td><td class="px-3 py-3">{{ room.type }}</td>
                             <td class="px-3 py-3 font-bold text-blue-900">{{ room.deposit }}/{{ room.rent }}</td>
-                            <td class="px-3 py-3 text-blue-700 font-medium">{{ room.pw }}</td>
+                            <td class="px-3 py-3 text-blue-700">{{ room.maintenance }}</td>
+                            <td class="px-3 py-3 text-gray-500">{{ room.pw }}</td>
                             <td class="px-3 py-3"><span class="badge-ready">{{ room.status }}</span></td>
+                            <td class="px-3 py-3 text-gray-400 italic">{{ room.note }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -69,33 +75,39 @@
     </div>
     {% endfor %}
 
-    <h2 class="text-xl font-bold mt-10 mb-4 text-gray-800 border-l-4 border-orange-500 pl-2">⏳ 단기 렌탈</h2>
+    <h2 class="text-lg font-bold mt-10 mb-3 text-gray-800 border-l-4 border-orange-500 pl-2">⏳ 단기 렌탈</h2>
     {% for area_name, buildings in short_data.items() %}
-    <div class="mb-8">
-        <h3 class="text-sm font-bold mb-2 text-orange-700">📍 {{ area_name }}</h3>
+    <div class="mb-6">
+        <h3 class="text-xs font-bold mb-2 text-orange-700">📍 {{ area_name }}</h3>
         {% for b_name, b_data in buildings.items() %}
-        <div class="bg-white rounded-xl shadow-sm border border-orange-100 mb-4 overflow-hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-orange-100 mb-4 overflow-hidden text-xs">
             <div class="bg-orange-50 p-3 border-b flex justify-between items-start">
                 <div class="flex-1">
-                    {% if b_name and b_name != "이름없음" %}<p class="font-bold text-base leading-tight text-orange-900">{{ b_name }}</p>{% endif %}
-                    <p class="text-xs text-gray-500 mt-1">{{ b_data.address }}</p>
+                    <p class="font-bold text-sm leading-tight text-orange-900">{{ b_name }}</p>
+                    <p class="text-[10px] text-gray-500 mt-1">{{ b_data.address }}</p>
                 </div>
                 <div class="text-right">
-                    <span class="bg-white border border-orange-200 px-2 py-0.5 rounded text-[10px] text-orange-800 font-medium">🔑 공동현관: {{ b_data.entrance_pw }}</span>
+                    <span class="bg-white border border-orange-200 px-2 py-0.5 rounded text-[9px] text-orange-800 font-medium">🔑 공동현관: {{ b_data.entrance_pw }}</span>
                 </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-[11px] text-left whitespace-nowrap">
-                    <thead class="bg-orange-50/50 text-gray-400 border-b">
-                        <tr><th class="px-3 py-2">호실</th><th class="px-4 py-2">예치금/렌탈료</th><th class="px-3 py-2 text-orange-700">세대비번</th><th class="px-3 py-2">기간</th></tr>
+                <table class="w-full text-left whitespace-nowrap">
+                    <thead class="bg-orange-50/50 text-gray-400 border-b text-[10px]">
+                        <tr>
+                            <th class="px-3 py-2">호실</th><th class="px-3 py-2">구조</th>
+                            <th class="px-3 py-2">예치금/렌탈료</th><th class="px-3 py-2 text-orange-700">관리비</th>
+                            <th class="px-3 py-2">렌탈기간</th><th class="px-3 py-2">세대비번</th><th class="px-3 py-2">특이사항</th>
+                        </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-gray-100 text-[10px]">
                         {% for room in b_data.rooms %}
                         <tr>
-                            <td class="px-3 py-3 font-bold">{{ room.no }}</td>
-                            <td class="px-4 py-3 font-bold text-orange-600">{{ room.deposit }}/{{ room.rent }}</td>
-                            <td class="px-3 py-3 text-orange-700 font-medium">{{ room.pw }}</td>
-                            <td class="px-3 py-3 text-gray-400">{{ room.months }}</td>
+                            <td class="px-3 py-3 font-bold">{{ room.no }}</td><td class="px-3 py-3">{{ room.type }}</td>
+                            <td class="px-3 py-3 font-bold text-orange-600">{{ room.deposit }}/{{ room.rent }}</td>
+                            <td class="px-3 py-3 text-orange-700">{{ room.maintenance }}</td>
+                            <td class="px-3 py-3">{{ room.months }}</td>
+                            <td class="px-3 py-3 text-gray-500">{{ room.pw }}</td>
+                            <td class="px-3 py-3 text-gray-400 italic">{{ room.note }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
