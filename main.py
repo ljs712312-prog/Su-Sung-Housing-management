@@ -8,7 +8,7 @@ import io
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-# 🔗 2단계에서 뽑은 두 개의 링크를 각각 아래 따옴표 안에 넣으세요.
+# 구글 시트 링크 (본인의 링크인지 다시 한번 확인하세요)
 URL_NORMAL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?gid=0&single=true&output=csv"
 URL_SHORT = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?gid=1947865401&single=true&output=csv"
 
@@ -50,7 +50,7 @@ async def index(request: Request):
             })
             total_normal_rooms += 1
 
-    # 2. 단기 렌탈 데이터 처리 (새로운 양식 반영)
+    # 2. 단기 렌탈 데이터 처리
     df_short = fetch_csv(URL_SHORT)
     short_data = {}
     total_short_rooms = 0
