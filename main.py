@@ -12,7 +12,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 # 🔗 구글 스프레드시트 CSV 출력 링크 (본인의 링크로 교체하세요)
-GOOGLE_SHEET_URL = https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?output=csv
+GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pubhtml"
 
 def get_real_estate_data():
     try:
