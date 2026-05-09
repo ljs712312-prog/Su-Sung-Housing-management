@@ -9,8 +9,8 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 # 🔗 2단계에서 뽑은 두 개의 링크를 각각 아래 따옴표 안에 넣으세요.
-URL_NORMAL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?output=csv"
-URL_SHORT = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?output=csv"
+URL_NORMAL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?gid=0&single=true&output=csv"
+URL_SHORT = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?gid=1947865401&single=true&output=csv"
 
 def fetch_csv(url):
     try:
