@@ -17,13 +17,13 @@
             <h1 class="text-xl font-bold text-blue-900 leading-tight">SU SUNG<br>HOUSING</h1>
             <p class="text-[10px] text-gray-400">실시간 매물장</p>
         </div>
-        <div class="text-right">
-            <p class="text-[10px] text-gray-400">임대문의</p>
-            <p class="text-base font-bold text-blue-900">010-6485-0730</p>
+        <div class="text-right text-blue-900 font-bold">
+            <p class="text-[10px] text-gray-400 font-normal">임대문의</p>
+            <p class="text-base">010-6485-0730</p>
         </div>
     </header>
 
-    <div class="bg-blue-900 rounded-xl p-4 text-white mb-6 flex justify-between items-center shadow-md">
+    <div class="bg-blue-900 rounded-xl p-4 text-white mb-6 flex justify-between items-center">
         <div><p class="text-base font-bold">매물 현황</p><p class="opacity-70 text-[9px]">{{ today }} 업데이트</p></div>
         <div class="flex gap-4">
             <div class="text-center"><p class="text-[9px] opacity-60">일반</p><p class="text-sm font-bold">{{ total_normal }}</p></div>
@@ -31,20 +31,24 @@
         </div>
     </div>
 
-    <h2 class="text-lg font-bold mb-3 text-gray-800 border-l-4 border-blue-600 pl-2">🏢 일반 매물</h2>
-    {% for area_name, buildings in normal_data.items() %}
+    {% for type_label, data, border_color, text_color, bg_color in [
+        ('일반 매물', normal_data, 'border-blue-600', 'text-blue-800', 'bg-gray-50'),
+        ('단기 렌탈', short_data, 'border-orange-500', 'text-orange-700', 'bg-orange-50')
+    ] %}
+    <h2 class="text-lg font-bold mb-3 text-gray-800 border-l-4 {{ border_color }} pl-2">{{ type_label }}</h2>
+    {% for area, buildings in data.items() %}
     <div class="mb-6">
-        <h3 class="text-xs font-bold mb-2 text-blue-800">📍 {{ area_name }}</h3>
+        <h3 class="text-xs font-bold mb-2 {{ text_color }}">📍 {{ area }}</h3>
         {% for b_name, b_data in buildings.items() %}
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4 overflow-hidden text-xs">
-            <div class="bg-gray-50 p-3 border-b flex justify-between items-start">
+            <div class="{{ bg_color }} p-3 border-b flex justify-between items-start">
                 <div class="flex-1">
                     <p class="font-bold text-sm leading-tight">{{ b_name }}</p>
                     <p class="text-[10px] text-gray-500 mt-1">{{ b_data.address }}</p>
                 </div>
                 <div class="text-right flex flex-col gap-1">
-                    <p class="text-[10px] text-blue-600 font-bold">📞 임차인: {{ b_data.landlord }}</p>
-                    <span class="bg-white border border-gray-300 px-2 py-0.5 rounded text-[9px] text-gray-700 font-medium">🔑 공동현관: {{ b_data.entrance_pw }}</span>
+                    <p class="text-[10px] {{ text_color }} font-bold">📞 임차인: {{ b_data.tenant_phone }}</p>
+                    <span class="bg-white border border-gray-300 px-2 py-0.5 rounded text-[9px] font-medium">🔑 공동현관: {{ b_data.entrance_pw }}</span>
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -52,17 +56,17 @@
                     <thead class="bg-gray-50 text-gray-400 border-b text-[10px]">
                         <tr>
                             <th class="px-3 py-2">호실</th><th class="px-3 py-2">타입</th>
-                            <th class="px-3 py-2">보증금/월세</th><th class="px-3 py-2 text-blue-700">관리비</th>
-                            <th class="px-3 py-2">세대비번</th><th class="px-3 py-2">상태</th><th class="px-3 py-2">비고</th>
+                            <th class="px-3 py-2">보증금/월세</th><th class="px-3 py-2">관리비</th>
+                            <th class="px-3 py-2 text-blue-700">세대비번</th><th class="px-3 py-2">상태</th><th class="px-3 py-2">비고</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-[10px]">
                         {% for room in b_data.rooms %}
                         <tr>
-                            <td class="px-3 py-3 font-bold">{{ room.no }}</td><td class="px-3 py-3">{{ room.type }}</td>
+                            <td class="px-3 py-3 font-bold">{{ room.no }}호</td><td class="px-3 py-3">{{ room.type }}</td>
                             <td class="px-3 py-3 font-bold text-blue-900">{{ room.deposit }}/{{ room.rent }}</td>
-                            <td class="px-3 py-3 text-blue-700">{{ room.maintenance }}</td>
-                            <td class="px-3 py-3 text-gray-500">{{ room.pw }}</td>
+                            <td class="px-3 py-3 text-gray-600">{{ room.maintenance }}</td>
+                            <td class="px-3 py-3 text-blue-700 font-medium">{{ room.unit_pw }}</td>
                             <td class="px-3 py-3"><span class="badge-ready">{{ room.status }}</span></td>
                             <td class="px-3 py-3 text-gray-400 italic">{{ room.note }}</td>
                         </tr>
@@ -74,48 +78,6 @@
         {% endfor %}
     </div>
     {% endfor %}
-
-    <h2 class="text-lg font-bold mt-10 mb-3 text-gray-800 border-l-4 border-orange-500 pl-2">⏳ 단기 렌탈</h2>
-    {% for area_name, buildings in short_data.items() %}
-    <div class="mb-6">
-        <h3 class="text-xs font-bold mb-2 text-orange-700">📍 {{ area_name }}</h3>
-        {% for b_name, b_data in buildings.items() %}
-        <div class="bg-white rounded-xl shadow-sm border border-orange-100 mb-4 overflow-hidden text-xs">
-            <div class="bg-orange-50 p-3 border-b flex justify-between items-start">
-                <div class="flex-1">
-                    <p class="font-bold text-sm leading-tight text-orange-900">{{ b_name }}</p>
-                    <p class="text-[10px] text-gray-500 mt-1">{{ b_data.address }}</p>
-                </div>
-                <div class="text-right">
-                    <span class="bg-white border border-orange-200 px-2 py-0.5 rounded text-[9px] text-orange-800 font-medium">🔑 공동현관: {{ b_data.entrance_pw }}</span>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left whitespace-nowrap">
-                    <thead class="bg-orange-50/50 text-gray-400 border-b text-[10px]">
-                        <tr>
-                            <th class="px-3 py-2">호실</th><th class="px-3 py-2">구조</th>
-                            <th class="px-3 py-2">예치금/렌탈료</th><th class="px-3 py-2 text-orange-700">관리비</th>
-                            <th class="px-3 py-2">렌탈기간</th><th class="px-3 py-2">세대비번</th><th class="px-3 py-2">특이사항</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100 text-[10px]">
-                        {% for room in b_data.rooms %}
-                        <tr>
-                            <td class="px-3 py-3 font-bold">{{ room.no }}</td><td class="px-3 py-3">{{ room.type }}</td>
-                            <td class="px-3 py-3 font-bold text-orange-600">{{ room.deposit }}/{{ room.rent }}</td>
-                            <td class="px-3 py-3 text-orange-700">{{ room.maintenance }}</td>
-                            <td class="px-3 py-3">{{ room.months }}</td>
-                            <td class="px-3 py-3 text-gray-500">{{ room.pw }}</td>
-                            <td class="px-3 py-3 text-gray-400 italic">{{ room.note }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
     {% endfor %}
 </body>
 </html>
