@@ -8,8 +8,8 @@ import io
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-# 🔗 구글 시트 링크 (실제 링크로 교체 확인)
-URL_NORMAL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?gid=0&single=true&output=csv"
+# 🔗 반드시 본인의 '일반매물' 시트와 '단기매물' 시트의 CSV 링크를 각각 넣으세요.
+URL_NORMAL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQcWQI2th_ihK8nx_qbdxB_1FeFo3Xhvqyr0lW-0m651YZ-GmvgmblPaML3fZB03qRMOphtuPA7j5aM/pub?gid=0&single=true&output=csv"
 URL_SHORT = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp7nLeaypE0j2nKqqW_pU2UNQIl0S-4fx4GuK1H0rOaR0Qr5OkfTUV4cQ9QI7__tv8I-hKr0vTK0L/pub?gid=1947865401&single=true&output=csv"
 
 def fetch_csv(url):
@@ -24,48 +24,42 @@ def fetch_csv(url):
 
 @app.get("/")
 async def index(request: Request):
-    # 1. 일반 매물 처리
+    # 1. 일반 매물 처리 (image_bb74f7.png 컬럼 기준)
     df_normal = fetch_csv(URL_NORMAL)
     normal_data = {}
-    total_normal_rooms = 0
     if not df_normal.empty:
         for _, row in df_normal.iterrows():
-            area = row.get("지역", "")
-            b_name = row.get("건물명", "")
+            area = row.get("지역", "").strip()
+            b_name = row.get("건물명", "").strip()
             if not area or not b_name: continue
-            
             if area not in normal_data: normal_data[area] = {}
             if b_name not in normal_data[area]:
                 normal_data[area][b_name] = {
                     "address": row.get("주소", ""),
-                    "landlord": row.get("임차인연락처", row.get("건물주연락처", "")), # 임차인 번호 우선
-                    "entrance_pw": row.get("현관비번", ""), # 공동현관용
+                    "landlord": row.get("임차인연락처", ""),
+                    "entrance_pw": row.get("현관비번", ""),
                     "rooms": []
                 }
             normal_data[area][b_name]["rooms"].append({
                 "no": row.get("호실", ""), "type": row.get("타입", ""),
                 "deposit": row.get("보증금", ""), "rent": row.get("월세", ""),
-                "maintenance": row.get("관리비", ""), 
-                "pw": row.get("방비번", row.get("세대비번", "")), # 세대비번용
+                "maintenance": row.get("관리비", ""), "pw": row.get("세대비번", ""),
                 "status": row.get("상태", ""), "note": row.get("비고", "")
             })
-            total_normal_rooms += 1
 
-    # 2. 단기 렌탈 처리
+    # 2. 단기 렌탈 처리 (image_bb7400.png 컬럼 기준)
     df_short = fetch_csv(URL_SHORT)
     short_data = {}
-    total_short_rooms = 0
     if not df_short.empty:
         for _, row in df_short.iterrows():
-            area = row.get("지역", "")
-            b_name = row.get("건물명", "")
+            area = row.get("지역", "").strip()
+            b_name = row.get("건물명", "").strip()
             if not area or not b_name: continue
-            
             if area not in short_data: short_data[area] = {}
             if b_name not in short_data[area]:
                 short_data[area][b_name] = {
                     "address": row.get("번지", ""),
-                    "entrance_pw": row.get("공동현관비번", ""), # 공동현관용
+                    "entrance_pw": row.get("공동현관비번", ""),
                     "rooms": []
                 }
             short_data[area][b_name]["rooms"].append({
@@ -73,14 +67,14 @@ async def index(request: Request):
                 "deposit": row.get("예치금", ""), "rent": row.get("렌탈료", ""),
                 "maintenance": row.get("기본관리비", ""), "options": row.get("옵션", ""),
                 "months": row.get("렌탈개월수", ""), "note": row.get("특이사항", ""),
-                "pw": row.get("세대비번", "") # 세대비번용
+                "pw": row.get("세대비번", "")
             })
-            total_short_rooms += 1
 
     context = {
         "request": request, "company_name": "수성 주택관리",
         "normal_data": normal_data, "short_data": short_data,
-        "total_normal": total_normal_rooms, "total_short": total_short_rooms,
+        "total_normal": sum(len(b["rooms"]) for a in normal_data.values() for b in a.values()),
+        "total_short": sum(len(b["rooms"]) for a in short_data.values() for b in a.values()),
         "today": datetime.now().strftime("%Y.%m.%d")
     }
     return templates.TemplateResponse(request=request, name="index.html", context=context)
